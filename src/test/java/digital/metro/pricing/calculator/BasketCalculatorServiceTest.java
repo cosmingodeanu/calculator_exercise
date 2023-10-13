@@ -1,5 +1,10 @@
 package digital.metro.pricing.calculator;
 
+import digital.metro.pricing.calculator.dto.BasketCalculationResult;
+import digital.metro.pricing.calculator.model.Basket;
+import digital.metro.pricing.calculator.model.BasketEntry;
+import digital.metro.pricing.calculator.repo.PriceRepository;
+import digital.metro.pricing.calculator.service.BasketCalculatorService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -79,6 +84,6 @@ public class BasketCalculatorServiceTest {
         // THEN
         Assertions.assertThat(result.getCustomerId()).isEqualTo("customer-1");
         Assertions.assertThat(result.getPricedBasketEntries()).isEqualTo(prices);
-        Assertions.assertThat(result.getTotalAmount()).isEqualByComparingTo(new BigDecimal("12.78"));
+        Assertions.assertThat(result.getTotalAmount()).isEqualByComparingTo(new BigDecimal("11.78"));
     }
 }

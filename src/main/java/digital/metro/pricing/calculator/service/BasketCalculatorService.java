@@ -1,5 +1,9 @@
-package digital.metro.pricing.calculator;
+package digital.metro.pricing.calculator.service;
 
+import digital.metro.pricing.calculator.dto.BasketCalculationResult;
+import digital.metro.pricing.calculator.model.Basket;
+import digital.metro.pricing.calculator.model.BasketEntry;
+import digital.metro.pricing.calculator.repo.PriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public class BasketCalculatorService {
 
-    private PriceRepository priceRepository;
+    private final PriceRepository priceRepository;
 
     @Autowired
     public BasketCalculatorService(PriceRepository priceRepository) {
@@ -24,7 +28,7 @@ public class BasketCalculatorService {
                         entry -> calculateArticle(entry, basket.getCustomerId())));
 
         BigDecimal totalAmount = pricedArticles.values().stream()
-                .reduce(BigDecimal.ONE, (a, b) -> a.add(b));
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new BasketCalculationResult(basket.getCustomerId(), pricedArticles, totalAmount);
     }

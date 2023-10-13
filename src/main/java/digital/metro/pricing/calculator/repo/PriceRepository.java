@@ -1,4 +1,4 @@
-package digital.metro.pricing.calculator;
+package digital.metro.pricing.calculator.repo;
 
 import org.springframework.stereotype.Component;
 
