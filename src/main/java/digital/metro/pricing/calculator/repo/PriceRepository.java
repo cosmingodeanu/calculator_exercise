@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -28,19 +29,23 @@ public class PriceRepository {
         return prices.computeIfAbsent(articleId, key -> computeArticleRandomPrice());
     }
 
-    public BigDecimal getPriceByArticleIdAndCustomerId(String articleId, String customerId) {
+    public Optional<BigDecimal> getPriceByArticleIdAndCustomerId(String articleId, String customerId) {
         switch (customerId) {
             case CUSTOMER1:
-                return getPriceByArticleId(articleId).multiply(CUSTOMER1_FACTOR).setScale(SCALE, RoundingMode.HALF_UP);
+                return computePriceByArticleIdWithFactor(articleId, CUSTOMER1_FACTOR);
             case CUSTOMER2:
-                return getPriceByArticleId(articleId).multiply(CUSTOMER2_FACTOR).setScale(SCALE, RoundingMode.HALF_UP);
+                return computePriceByArticleIdWithFactor(articleId, CUSTOMER2_FACTOR);
+            default:
+                return Optional.empty();
         }
-
-        return null;
     }
 
-    private static BigDecimal computeArticleRandomPrice() {
+    private BigDecimal computeArticleRandomPrice() {
         return BigDecimal.valueOf(ARTICLE_LOWER_LIMIT_RANGE + random.nextDouble() * ARTICLE_UPPER_LIMIT_RANGE)
                 .setScale(SCALE, RoundingMode.HALF_UP);
+    }
+
+    private Optional<BigDecimal> computePriceByArticleIdWithFactor(String articleId, BigDecimal factor) {
+        return Optional.of(getPriceByArticleId(articleId).multiply(factor).setScale(SCALE, RoundingMode.HALF_UP));
     }
 }

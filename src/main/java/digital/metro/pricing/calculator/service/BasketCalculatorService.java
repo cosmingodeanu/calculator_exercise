@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -36,12 +37,8 @@ public class BasketCalculatorService {
     public BigDecimal calculateArticle(BasketEntry be, String customerId) {
         String articleId = be.getArticleId();
 
-        if (customerId != null) {
-            BigDecimal customerPrice = priceRepository.getPriceByArticleIdAndCustomerId(articleId, customerId);
-            if (customerPrice != null) {
-                return customerPrice;
-            }
-        }
-        return priceRepository.getPriceByArticleId(articleId);
+        return Optional.ofNullable(customerId)
+                .flatMap(cId -> priceRepository.getPriceByArticleIdAndCustomerId(articleId, cId))
+                        .orElseGet(()->priceRepository.getPriceByArticleId(articleId));
     }
 }

@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class BasketCalculatorServiceTest {
@@ -48,7 +49,7 @@ public class BasketCalculatorServiceTest {
         // GIVEN
         String articleId = "article-1";
         BigDecimal standardPrice = new BigDecimal("34.29");
-        BigDecimal customerPrice = new BigDecimal("29.99");
+        Optional<BigDecimal> customerPrice = Optional.of(new BigDecimal("29.99"));
         String customerId = "customer-1";
 
         Mockito.when(mockPriceRepository.getPriceByArticleId(articleId)).thenReturn(standardPrice);
@@ -58,7 +59,7 @@ public class BasketCalculatorServiceTest {
         BigDecimal result = service.calculateArticle(new BasketEntry(articleId, BigDecimal.ONE), "customer-1");
 
         // THEN
-        Assertions.assertThat(result).isEqualByComparingTo(customerPrice);
+        Assertions.assertThat(result).isEqualByComparingTo(customerPrice.get());
     }
 
     @Test
