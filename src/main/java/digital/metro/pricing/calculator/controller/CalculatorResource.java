@@ -29,7 +29,7 @@ public class CalculatorResource {
         return basketCalculatorService.calculateArticle(new BasketEntry(articleId, BigDecimal.ONE), null);
     }
 
-    @GetMapping("/calculator/getarticlepriceforcustomer")
+    @GetMapping("/calculator/get-article-price-for-customer")
     public BigDecimal getArticlePriceForCustomer(@RequestParam String articleId, @RequestParam String customerId) {
         return basketCalculatorService.calculateArticle(new BasketEntry(articleId, BigDecimal.ONE), customerId);
     }

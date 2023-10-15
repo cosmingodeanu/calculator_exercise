@@ -14,22 +14,33 @@ import java.util.Random;
 @Component
 public class PriceRepository {
 
-    private Map<String, BigDecimal> prices = new HashMap<>();
-    private Random random = new Random();
+    private final Map<String, BigDecimal> prices = new HashMap<>();
+    private static final Random random = new Random();
+    private static final int SCALE = 2;
+    private static final double ARTICLE_LOWER_LIMIT_RANGE = 0.5d;
+    private static final double ARTICLE_UPPER_LIMIT_RANGE = 29.50d;
+    private static final String CUSTOMER1 = "customer-1";
+    private static final String CUSTOMER2 = "customer-2";
+    private static final BigDecimal CUSTOMER1_FACTOR = new BigDecimal("0.90");
+    private static final BigDecimal CUSTOMER2_FACTOR = new BigDecimal("0.85");
 
-    public BigDecimal getpricebyarticleId(String articleId) {
-        return prices.computeIfAbsent(articleId,
-                key -> BigDecimal.valueOf(0.5d + random.nextDouble() * 29.50d).setScale(2, RoundingMode.HALF_UP));
+    public BigDecimal getPriceByArticleId(String articleId) {
+        return prices.computeIfAbsent(articleId, key -> computeArticleRandomPrice());
     }
 
-    public BigDecimal getPriceByArticleIdAndCustomerId(String id1, String id2) {
-        switch(id2) {
-            case "customer-1":
-                return getpricebyarticleId(id1).multiply(new BigDecimal("0.90")).setScale(2, RoundingMode.HALF_UP);
-            case "customer-2":
-                return getpricebyarticleId(id1).multiply(new BigDecimal("0.85")).setScale(2, RoundingMode.HALF_UP);
+    public BigDecimal getPriceByArticleIdAndCustomerId(String articleId, String customerId) {
+        switch (customerId) {
+            case CUSTOMER1:
+                return getPriceByArticleId(articleId).multiply(CUSTOMER1_FACTOR).setScale(SCALE, RoundingMode.HALF_UP);
+            case CUSTOMER2:
+                return getPriceByArticleId(articleId).multiply(CUSTOMER2_FACTOR).setScale(SCALE, RoundingMode.HALF_UP);
         }
 
         return null;
+    }
+
+    private static BigDecimal computeArticleRandomPrice() {
+        return BigDecimal.valueOf(ARTICLE_LOWER_LIMIT_RANGE + random.nextDouble() * ARTICLE_UPPER_LIMIT_RANGE)
+                .setScale(SCALE, RoundingMode.HALF_UP);
     }
 }

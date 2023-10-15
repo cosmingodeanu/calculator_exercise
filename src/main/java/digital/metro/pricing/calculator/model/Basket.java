@@ -17,6 +17,6 @@ public class Basket {
     }
 
     public Set<BasketEntry> getEntries() {
-        return entries;
+        return Set.copyOf(entries);
     }
 }

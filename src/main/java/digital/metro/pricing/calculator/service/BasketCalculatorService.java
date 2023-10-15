@@ -34,14 +34,14 @@ public class BasketCalculatorService {
     }
 
     public BigDecimal calculateArticle(BasketEntry be, String customerId) {
-        String ArticleId = be.getArticleId();
+        String articleId = be.getArticleId();
 
         if (customerId != null) {
-            BigDecimal customerPrice = priceRepository.getPriceByArticleIdAndCustomerId(ArticleId, customerId);
+            BigDecimal customerPrice = priceRepository.getPriceByArticleIdAndCustomerId(articleId, customerId);
             if (customerPrice != null) {
                 return customerPrice;
             }
         }
-        return priceRepository.getpricebyarticleId(ArticleId);
+        return priceRepository.getPriceByArticleId(articleId);
     }
 }

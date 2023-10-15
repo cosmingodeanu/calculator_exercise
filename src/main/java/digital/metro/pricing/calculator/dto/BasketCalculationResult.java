@@ -23,7 +23,7 @@ public class BasketCalculationResult {
     }
 
     public Map<String, BigDecimal> getPricedBasketEntries() {
-        return pricedBasketEntries;
+        return Map.copyOf(pricedBasketEntries);
     }
 
     public BigDecimal getTotalAmount() {
